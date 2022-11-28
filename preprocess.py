@@ -1,20 +1,6 @@
 import pandas as pd
 import numpy as np
-from zipfile import ZipFile
 
-################################################
-# Import all files from zip file using code below - UNCOMMENT, USE ONCE AND COMMENT OUT:
-# file_name = 'systems.zip'
-# # opening the zip file in READ mode
-# with ZipFile(file_name, 'r') as zip:
-#     # printing all the contents of the zip file
-#     zip.printdir()
-#
-#     # extracting all the files
-#     print('Extracting all the files now...')
-#     zip.extractall()
-#     print('Done!')
-#################################################
 # Data frame containing the first dataset as df:
 df = pd.read_json('firstdataset.json')
 
