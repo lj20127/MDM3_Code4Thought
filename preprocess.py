@@ -5,9 +5,17 @@ import numpy as np
 df = pd.read_json('firstdataset.json')
 
 # removing all technologies apart from java
-tech ='java'
-java_idx = df[df['technology'] == tech].index
+tech = 'java'
+df_idx = df[df['technology'] == tech].index
 df.drop(index=df[df['technology'] != tech].index, axis=0, inplace=True)
+
+# removing subjects that contain 'Rename'
+df_idx = df[df['subject'].str.contains('Rename') == False].index
+df.drop(index=df[df['subject'].str.contains('Rename')].index, axis=0, inplace=True)
+
+# removing subjects that contain '=>' 
+df_idx = df[df['subject'].str.contains('=>') == False].index
+df.drop(index=df[df['subject'].str.contains('=>')].index, axis=0, inplace=True)
 
 # Splitting the data into relevant variables:
 author = df['author']  # simply shows all corresponding authors to each commit
@@ -32,5 +40,5 @@ for a in author:
     for auth in authors_unique:
         if a == auth:
             idx = np.where(authors_unique==auth)
-            lines_per_author[idx] += lines_added[java_idx[i]]
+            lines_per_author[idx] += lines_added[df_idx[i]]
     i += 1
