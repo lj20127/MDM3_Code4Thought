@@ -19,6 +19,15 @@ lines_deleted = df['deletedloc']
 # Array of all the authors that have commited
 authors_unique = np.unique(np.array(author))
 
+# REMOVING ALL TECHNOLOGIES APART FROM JAVA:
+java_df = []
+java_index = []
+for i in range(len(df)):
+    if df.iloc[i]['technology'] == 'java':
+        java_index.append(i)
+        java_df.append(df.iloc[i])
+
+
 # Finds the lines commited per author
 lines_per_author = np.zeros(shape=authors_unique.shape)
 i = 0
