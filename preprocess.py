@@ -4,21 +4,6 @@ import numpy as np
 # Data frame containing the first dataset as df:
 df = pd.read_json('firstdataset.json')
 
-# Splitting the data into relevant variables:
-author = df['author']  # simply shows all corresponding authors to each commit
-
-# DATES - day/month/year
-day = df['day']
-month = df['month']
-year = df['year']
-
-# Lines - will show lines added and lines deleted respectively
-lines_added = df['addedloc']  # Assuming that the headers mean adding and deleting lines
-lines_deleted = df['deletedloc']
-
-# Array of all the authors that have commited
-authors_unique = np.unique(np.array(author))
-
 # REMOVING ALL TECHNOLOGIES APART FROM JAVA:
 java_df = []
 java_index = []
@@ -27,6 +12,21 @@ for i in range(len(df)):
         java_index.append(i)
         java_df.append(df.iloc[i])
 
+# Splitting the data into relevant variables:
+author = java_df['author']  # simply shows all corresponding authors to each commit
+
+# DATES - day/month/year
+day = java_df['day']
+month = java_df['month']
+year = java_df['year']
+
+# Lines - will show lines added and lines deleted respectively
+lines_added = java_df['addedloc']  # Assuming that the headers mean adding and deleting lines
+lines_deleted = java_df['deletedloc']
+
+
+# Array of all the authors that have commited
+authors_unique = np.unique(np.array(author))
 
 # Finds the lines commited per author
 lines_per_author = np.zeros(shape=authors_unique.shape)
