@@ -5,8 +5,9 @@ import numpy as np
 df = pd.read_json('firstdataset.json')
 
 # removing all technologies apart from java
-java_idx = df[df['technology'] == 'java'].index
-df.drop(index=df[df['technology'] != 'java'].index, axis=0, inplace=True)
+tech ='java'
+java_idx = df[df['technology'] == tech].index
+df.drop(index=df[df['technology'] != tech].index, axis=0, inplace=True)
 
 # Splitting the data into relevant variables:
 author = df['author']  # simply shows all corresponding authors to each commit
