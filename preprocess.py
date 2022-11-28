@@ -23,9 +23,10 @@ authors_unique = np.unique(np.array(author))
 java_df = []
 java_index = []
 for i in range(len(df)):
-    if df.iloc[i]['technology'] == 'java':
+    if df.iloc[i]['technology'] == 'java' and 'Rename' not in df.iloc[i]['subject']:
         java_index.append(i)
         java_df.append(df.iloc[i])
+
 
 
 # Finds the lines commited per author
@@ -37,3 +38,5 @@ for a in author:
             idx = np.where(authors_unique==auth)
             lines_per_author[idx] += lines_added[i]
     i += 1
+
+
