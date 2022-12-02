@@ -4,17 +4,25 @@ import numpy as np
 # Data frame containing the first dataset as df:
 df = pd.read_json('firstdataset.json')
 
+def filter(df, tech):
+    df_idx1 = df[df['technology'] == tech].index
+    df.drop(index=df[df['technology'] != tech].index, axis=0, inplace=True)
+    df_idx2 = df[df['subject'].str.contains('Rename') == False].index
+    df.drop(index=df[df['subject'].str.contains('Rename')].index, axis=0, inplace=True)
+    df_idx3 = df[df['subject'].str.contains('=>') == False].index
+    df.drop(index=df[df['subject'].str.contains('=>')].index, axis=0, inplace=True)
+
 # removing all technologies apart from java
 tech = 'java'
 df_idx = df[df['technology'] == tech].index
 df.drop(index=df[df['technology'] != tech].index, axis=0, inplace=True)
 
 # removing subjects that contain 'Rename'
-df_idx = df[df['subject'].str.contains('Rename') == False].index
+df_idx2 = df[df['subject'].str.contains('Rename') == False].index
 df.drop(index=df[df['subject'].str.contains('Rename')].index, axis=0, inplace=True)
 
 # removing subjects that contain '=>' 
-df_idx = df[df['subject'].str.contains('=>') == False].index
+df_idx3 = df[df['subject'].str.contains('=>') == False].index
 df.drop(index=df[df['subject'].str.contains('=>')].index, axis=0, inplace=True)
 
 # Splitting the data into relevant variables:
