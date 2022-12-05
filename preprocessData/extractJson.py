@@ -1,6 +1,7 @@
 import os
 import warnings
 import pandas as pd
+import random as rnd
 warnings.filterwarnings('ignore')
 
 # Function to extract the weeknum for that date
@@ -13,9 +14,10 @@ def weekNum(x, start):
 # If you want to convert all the json files to dataframes then don't specify a value for 'n'
 def extractJson(filePath, n=None):
     filepaths  = [os.path.join(filePath, name) for name in os.listdir(filePath)]
+    # creates list of n random file paths
+    n_filepaths = rnd.sample(filepaths,n)
     # variable all_dfs ->
-    # notice 'filepaths[:n]', this is to extract only the first 'n' dataframes as extracting all can take a long time,
-    all_dfs = [pd.read_json(path) for path in filepaths[:n]]
+    all_dfs = [pd.read_json(path) for path in n_filepaths]
     # Columns of interest
     columns = ["date", "day", "month", "year", "author", "addedloc", "deletedloc"]
     for df in all_dfs:
