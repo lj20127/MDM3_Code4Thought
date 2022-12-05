@@ -20,6 +20,7 @@ for df in all_dfs:
     new_df = lpa(java_df)
     # removes any lpa over threshold
     new_df.loc[new_df.lpa > threshold] = 0
+    # removes any lpa that's 0
     if len(np.array(new_df["lpa"])) > 0:
         lists[i] = np.array(new_df["lpa"])
     i+=1
