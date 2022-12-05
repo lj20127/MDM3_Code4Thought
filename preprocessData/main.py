@@ -14,7 +14,7 @@ all_dfs = extractJson(path)
 # creates a list for lpa for every json file
 lists = [[] for i in range(0,len(all_dfs))]
 i=0
-threshold = 1000
+threshold = 5000
 for df in all_dfs:
     java_df = df[df.technology == "java"]
     new_df = lpa(java_df)
