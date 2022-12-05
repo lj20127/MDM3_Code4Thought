@@ -15,7 +15,7 @@ def weekNum(x, start):
 def extractJson(filePath, n=None):
     filepaths  = [os.path.join(filePath, name) for name in os.listdir(filePath)]
     # creates list of n random file paths
-    if ~n==None:
+    if n is not None:
         n_filepaths = rnd.sample(filepaths,n)
     else:
         n_filepaths = filepaths
