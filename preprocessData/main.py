@@ -4,6 +4,7 @@ import os
 import numpy as np
 from merging_lists import merge_lists
 import matplotlib.pyplot as plt
+from change_pts import detect_change_pts
 
 # Specify folder path that contains the json files
 path = os.path.dirname(os.path.realpath(__file__))+"/systems/"
@@ -28,8 +29,11 @@ for df in all_dfs:
 # removes any lpa lists that are empty
 lists = [lst for lst in lists if lst != []]
 
-# creats lpa vs weeks plot
+# creates lpa vs weeks plot
 output = merge_lists(lists)
 weeks = np.linspace(0,output[1],output[1])
-plt.plot(weeks,output[0])
-plt.show()
+# plt.plot(weeks,output[0])
+# plt.show()
+
+change_pts = detect_change_pts(np.array(output[0]),2)
+print(change_pts)
