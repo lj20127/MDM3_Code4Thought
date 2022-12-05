@@ -15,7 +15,10 @@ def weekNum(x, start):
 def extractJson(filePath, n=None):
     filepaths  = [os.path.join(filePath, name) for name in os.listdir(filePath)]
     # creates list of n random file paths
-    n_filepaths = rnd.sample(filepaths,n)
+    if n==None:
+        n_filepaths = rnd.sample(filepaths,n)
+    else:
+        n_filepaths = filepaths
     # variable all_dfs ->
     all_dfs = [pd.read_json(path) for path in n_filepaths]
     # Columns of interest
