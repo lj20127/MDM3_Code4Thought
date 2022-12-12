@@ -10,12 +10,13 @@ from change_pts import detect_change_pts
 path = os.path.dirname(os.path.realpath(__file__))+"/systems/"
 
 # List containing all the json files as panda dataframes
-all_dfs = extractJson(path)
+all_dfs = extractJson(path,10) # use 'all_dfs = extractJson(path,n)' for n random json files 
 
 # creates a list for lpa for every json file
 lists = [[] for i in range(0,len(all_dfs))]
 i=0
-threshold = 5000
+# sets (maximum) threshold for lpa
+threshold = 1000
 for df in all_dfs:
     java_df = df[df.technology == "java"]
     new_df = lpa(java_df)
@@ -31,9 +32,11 @@ lists = [lst for lst in lists if lst != []]
 
 # creates lpa vs weeks plot
 output = merge_lists(lists)
-weeks = np.linspace(0,output[1],output[1])
-# plt.plot(weeks,output[0])
-# plt.show()
+merged=output[0]
+num_weeks=output[1]
+weeks = np.linspace(0,num_weeks,num_weeks)
+plt.plot(weeks,merged)
+plt.show()
 
-change_pts = detect_change_pts(np.array(output[0]),2)
-print(change_pts)
+# finds 2 change points
+change_pts = detect_change_pts(np.array(merged),2)
