@@ -12,6 +12,36 @@ path = os.path.dirname(os.path.realpath(__file__))+"/systems/"
 # List containing all the json files as panda dataframes
 all_dfs = extractJson(path) # use 'all_dfs = extractJson(path,n)' for n random json files 
 
+# Splitting the data into two:
+
+def project_length(df): # function to calculate the length of projects
+    length = float(max(repo['year']))-float(min(repo['year']))
+    return length
+    
+project_length_list = []  # project length list...
+
+for repo in all_dfs:
+    project_length_list.append(project_length(repo)) # loop adds project lengths into a list 
+
+sorted_project_lengths = np.argsort(project_length_list) # project lengths are 'argsorted' into order
+midpoint = len(project_length_list)//2
+
+short_repo_index = sorted_project_lengths[:midpoint] # 'argsorted' indexes are found
+long_repo_index = sorted_project_lengths[midpoint:]
+print(long_repo_index)
+short_repos = []
+long_repos = []
+# here the repos are sorted into two different splits based on length of project time
+for index in short_repo_index:
+    short_repos.append(all_dfs[index])
+
+for index in long_repo_index:
+    long_repos.append(all_dfs[index])
+
+print(f"short repos: {len(short_repos)}")
+print(f"long repos: {len(long_repos)}")
+print()
+
 # creates a list for lpa for every json file
 lists = [[] for i in range(0,len(all_dfs))]
 i=0
