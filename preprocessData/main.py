@@ -23,12 +23,22 @@ project_length_list = []  # project length list...
 for repo in all_dfs:
     project_length_list.append(project_length(repo)) # loop adds project lengths into a list 
 
-sorted_project_lengths = np.argsort(project_length_list) # project lengths are 'argsorted' into order
-midpoint = len(project_length_list)//2
+print(sorted(project_length_list))
 
-short_repo_index = sorted_project_lengths[:midpoint] # 'argsorted' indexes are found
-long_repo_index = sorted_project_lengths[midpoint:]
-print(long_repo_index)
+sorted_project_list = sorted(project_length_list)
+argsorted_project_lengths = np.argsort(project_length_list) # project lengths are 'argsorted' into order
+
+boundary = 8
+
+short_repo_index = []
+long_repo_index = []
+
+for i in range(0,len(sorted_project_list)):
+    if sorted_project_list[i] <= boundary:
+        short_repo_index.append(argsorted_project_lengths[i])
+    else:
+        long_repo_index.append(argsorted_project_lengths[i])
+
 short_repos = []
 long_repos = []
 # here the repos are sorted into two different splits based on length of project time
@@ -40,8 +50,8 @@ for index in long_repo_index:
 
 print(f"short repos: {len(short_repos)}")
 print(f"long repos: {len(long_repos)}")
-print()
 
+    
 # creates a list for lpa for every json file
 lists = [[] for i in range(0,len(all_dfs))]
 i=0
