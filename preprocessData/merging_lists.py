@@ -3,7 +3,8 @@ from math import sqrt
 import numpy as np
 import matplotlib.pyplot as plt
 
-## Merges lists of different lenghts. Finds average 'time series'
+## Merges lists of different lengths. Finds average 'time series'.
+# Takes an array of lists of different lengths as an input, returns merged list (average time series), confidence_interval and maximum length (length of longest list).
 def merge_lists(lists): 
     maxlen = max([len(lst) for lst in lists])
     model = np.linspace(0,1,maxlen)
