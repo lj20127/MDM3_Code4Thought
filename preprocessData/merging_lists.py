@@ -1,4 +1,4 @@
-from statistics import mean
+from statistics import median
 from math import sqrt
 import numpy as np
 import matplotlib.pyplot as plt
@@ -14,9 +14,9 @@ def merge_lists(lists):
         i+=1
 
     # finds confidence interval of each week
-    confidence_interval = [0.95 * np.std(i) / sqrt(len(i)) for i in zip(*interped_lists)]
-    # finds mean of each week
-    merged = [mean(i) for i in zip(*interped_lists)]
+    confidence_interval = [0.8 * np.std(i) / sqrt(len(i)) for i in zip(*interped_lists)]
+    # finds median of each week
+    merged = [median(i) for i in zip(*interped_lists)]
     return merged,confidence_interval,maxlen
 
 ## To test the function
