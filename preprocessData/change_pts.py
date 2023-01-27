@@ -2,14 +2,16 @@ import numpy as np
 import ruptures as rpt
 import matplotlib.pyplot as plt
 
-def detect_change_pts(lst,n):
-    rpt_list = rpt.Binseg(model="l2").fit(lst)
+def detect_change_pts(model,n):
+    rpt_list = rpt.Binseg(model="l2").fit(model)
     change_pts = rpt_list.predict(n_bkps=n)
-    fig = rpt.display(lst,change_pts)
+    fig = rpt.display(model,change_pts)
     plt.show()
     return change_pts
 
 if __name__ == "__main__":
-    lst = np.array([2,2,2,2,2,2,1,1,1,1,1,3,3,3,3])
+    lst=np.concatenate([np.random.rand(100)+5,
+                       np.random.rand(100)+10,
+                       np.random.rand(100)+5])
     change_pts = detect_change_pts(lst,2)
     print(change_pts)
