@@ -7,10 +7,10 @@ import matplotlib.pyplot as plt
 from change_pts import detect_change_pts
 
 # Specify folder path that contains the json files
-path = os.path.dirname(os.path.realpath(__file__))+"/systems/"
+path = os.path.dirname(os.path.realpath(__file__))+"/systemsUpdated/"
 
 # List containing all the json files as panda dataframes
-all_dfs = extractJson(path) # use 'all_dfs = extractJson(path,n)' for n random json files 
+all_dfs = extractJson(path,5) # use 'all_dfs = extractJson(path,n)' for n random json files 
 
 # Splitting the data into two:
 
@@ -46,7 +46,7 @@ print()
 lists = [[] for i in range(0,len(all_dfs))]
 i=0
 # sets (maximum) threshold for lpa
-threshold = 1000
+threshold = 3000
 for df in all_dfs:
     java_df = df[df.technology == "java"]
     new_df = lpa(java_df)
@@ -66,8 +66,13 @@ merged=output[0]
 ci=output[1]
 num_weeks=output[2]
 weeks = np.linspace(0,num_weeks,num_weeks)
+
+# plots main lpa
 plt.plot(weeks,merged)
+
+# plots confidence interval
 plt.fill_between(weeks,(np.array(merged)-np.array(ci)),(np.array(merged)+np.array(ci)),color='red',alpha=0.3)
+
 plt.show()
 
 # finds 2 change points
