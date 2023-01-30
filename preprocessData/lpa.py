@@ -1,9 +1,9 @@
 ## Function to calculate 'Lines per author'
 def lpa(df):
     # Grouping by 'weeknum' and selecting "email" column
-    email_group = df.groupby("weeknum")["email"]
+    email_group = df.groupby("week")["email"]
     # Grouping by 'weeknum' and selecting "trueaddedloc" column
-    addedloc_group = df.groupby("weeknum")["trueaddedloc"]
+    addedloc_group = df.groupby("week")["addedloc"]
     
     addedloc_group_sum = addedloc_group.sum()
     unique_emails = email_group.unique().apply(lambda x: len(x))
@@ -31,7 +31,7 @@ def lpa(df):
                                             ...
     '''
     # Creates a new dataframe using the 'lpa' values
-    new_df = lpa.to_frame().rename({0:"lpa"}, axis=1).reset_index()
+    new_df = lpa.to_frame().rename({0:"week_linesperauthor"}, axis=1).reset_index()
     return new_df
 
 
