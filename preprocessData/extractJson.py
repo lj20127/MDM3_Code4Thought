@@ -31,12 +31,10 @@ def extractJson(filePath, n=None):
         start = new_df.date.min()
         
         # 'weeknum' by applying weekNum() to the date column
-        df["weeknum"] = new_df.date.apply(lambda x: weekNum(x, start))
+        df["week"] = new_df.date.apply(lambda x: weekNum(x, start))
         df["combinedpath"] = [''.join(l) for l in df.path]
         
-        # 'trueaddedloc' is the same as 'addedloc' without subjects including "=>" (i.e. renamed files)
-        df["trueaddedloc"] = df["addedloc"]
-        df["truedeletedloc"] = df["deletedloc"]
-        df.loc[df.combinedpath.str.contains("=>"), "trueaddedloc"] = 0
-        df.loc[df.combinedpath.str.contains("=>"), "truedeletedloc"] = 0
+        # 'removes subjects including "=>" (i.e. renamed files)
+        df.loc[df.combinedpath.str.contains("=>"), "addedloc"] = 0
+        df.loc[df.combinedpath.str.contains("=>"), "deletedloc"] = 0
     return all_dfs
