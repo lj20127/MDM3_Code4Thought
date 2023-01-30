@@ -5,6 +5,7 @@ import numpy as np
 from merging_lists import merge_lists
 import matplotlib.pyplot as plt
 from change_pts import detect_change_pts
+from tools import read_data_to_dataframes, filter_dataframe, lines_per_author
 
 def project_length(repo): # function to calculate the length of projects
     length = float(max(repo['year']))-float(min(repo['year']))
@@ -53,16 +54,16 @@ def model(dfs,txt,find_change_pts=False):
     # creates a list for lpa for every json file
     lists = [[] for i in range(0,len(dfs))]
     i=0
-    # sets (maximum) threshold for lpa per week
-    threshold = 10000
     for df in dfs:
-        java_df = df[df.technology == "java"]
-        new_df = lpa(java_df)
-        # removes any lpa over threshold
-        # new_df.loc[new_df.lpa > threshold] = 0
+        # filters dataframe
+        filtered_df = filter_dataframe(df)
+        # gets lines per author per week
+        new_df = lpa(filtered_df)
+        # new_df = lines_per_author(lines_per_author) # this should do the same as function above but has completely different outputs
+
         # removes any lpa that's 0
-        if len(np.array(new_df["lpa"])) > 0:
-            lists[i] = np.array(new_df["lpa"])
+        if len(np.array(new_df["week_linesperauthor"])) > 0:
+            lists[i] = np.array(new_df["week_linesperauthor"])
         i+=1
 
     # removes any lpa lists that are empty
@@ -90,12 +91,14 @@ def model(dfs,txt,find_change_pts=False):
 
 def main():
     # Specify folder path that contains the json files
-    path = os.path.dirname(os.path.realpath(__file__))+"/systemsUpdated/"
+    path = os.path.dirname(os.path.realpath(__file__))+"/systems/"
+    
+    # Gets repo info from either parquet or json files
+    all_dfs = read_data_to_dataframes(path) # use 'all_dfs = read_data_to_dataframes(path,n)' for n random files # there are more parquet files than json files??
 
-    # List containing all the json files as panda dataframes
-    all_dfs = extractJson(path) # use 'all_dfs = extractJson(path,n)' for n random json files 
+    # Splits repos into short and long term projects
+    short_repos,long_repos = split_repos(all_dfs) 
 
-    short_repos,long_repos = split_repos(all_dfs)
 
     model(short_repos,"Short Repos")
     model(long_repos,"Long Repos")
