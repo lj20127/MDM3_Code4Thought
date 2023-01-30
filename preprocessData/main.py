@@ -7,6 +7,7 @@ from merging_lists import merge_lists
 import matplotlib.pyplot as plt
 from change_pts import detect_change_pts
 from tools import read_data_to_dataframes, filter_dataframe, lines_per_author
+from timeseries import FitARIMA
 
 def project_length(repo): # function to calculate the length of projects
     length = float(max(repo['year']))-float(min(repo['year']))
@@ -61,7 +62,7 @@ def model(dfs,txt,find_change_pts=False):
         filtered_df = filter_dataframe(df)
         # gets lines per author per week
         new_df = lpa(filtered_df)
-        # new_df = lines_per_author(lines_per_author) # this should do the same as function above but has completely different outputs
+        # new_df = lines_per_author(filtered_df) # this should do the same as function above but has completely different outputs
 
         lpa_lists[i] = np.array(new_df["week_linesperauthor"])
         first_week[i] = lpa_lists[i][0]
@@ -69,33 +70,34 @@ def model(dfs,txt,find_change_pts=False):
 
     # removes any lpa lists that are empty
     lpa_lists = [lst for lst in lpa_lists if lst != []]
-    
     plt.hist(first_week,bins=len(dfs))
     plt.title("Histogram showing the distribution of lines per author for the first week")
     plt.show()
 
     # merges data
-    output = merge_lists(lpa_lists)
-
-    # converts model to dataframe
-    model_df = pd.DataFrame(data={'model':output[0]})
-    # fits ARIMA model to data
-    # FitARIMA(dfseries=model_df)
-
-    # creates lpa vs weeks plot
-    merged=output[0]
-    ci=output[1]
-    num_weeks=output[2]
+    merged,ci,num_weeks = merge_lists(lpa_lists)
     weeks = np.linspace(0,num_weeks,num_weeks)
 
-
+    # creates lpa vs weeks plot
     # plots main lpa
     plt.plot(weeks,merged)
-
     # plots confidence interval
     # plt.fill_between(weeks,(np.array(merged)-np.array(ci)),(np.array(merged)+np.array(ci)),color='red',alpha=0.3)
-
     plt.title(txt)
+    plt.show()
+
+
+    # converts model to dataframe for use with FitARIMA
+    model_df = pd.DataFrame(data={'model':merged})
+
+    # fits ARIMA model to data
+    arima_df = FitARIMA(dfseries=model_df)
+    arima_model = np.array(arima_df[0])
+    # sets all negative values to zero
+    arima_model[arima_model<0] = 0
+    # plots arima model
+    plt.plot(arima_model)
+    plt.title("ARIMA Model fitted to data")
     plt.show()
 
     # finds 2 change points
@@ -113,8 +115,8 @@ def main():
     short_repos,long_repos = split_repos(all_dfs) 
 
     model(dfs=all_dfs,txt="All repos")
-    model(dfs=short_repos,txt="Short Repos")
-    model(dfs=long_repos,txt="Long Repos")
+    # model(dfs=short_repos,txt="Short Repos")
+    # model(dfs=long_repos,txt="Long Repos")
 
 if __name__ == "__main__":
     main()
