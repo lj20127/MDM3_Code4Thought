@@ -1,6 +1,7 @@
 from extractJson import extractJson
 from lpa import lpa
 import os
+import pandas as pd
 import numpy as np
 from merging_lists import merge_lists
 import matplotlib.pyplot as plt
@@ -52,7 +53,8 @@ def split_repos(all_dfs):
 # Creates a model for lines per author per week for a given group of repos (dfs)
 def model(dfs,txt,find_change_pts=False):
     # creates a list for lpa for every json file
-    lists = [[] for i in range(0,len(dfs))]
+    lpa_lists = [[] for i in range(0,len(dfs))]
+    first_week = [[] for i in range(0,len(dfs))]
     i=0
     for df in dfs:
         # filters dataframe
@@ -61,20 +63,31 @@ def model(dfs,txt,find_change_pts=False):
         new_df = lpa(filtered_df)
         # new_df = lines_per_author(lines_per_author) # this should do the same as function above but has completely different outputs
 
-        # removes any lpa that's 0
-        if len(np.array(new_df["week_linesperauthor"])) > 0:
-            lists[i] = np.array(new_df["week_linesperauthor"])
+        lpa_lists[i] = np.array(new_df["week_linesperauthor"])
+        first_week[i] = lpa_lists[i][0]
         i+=1
 
     # removes any lpa lists that are empty
-    lists = [lst for lst in lists if lst != []]
+    lpa_lists = [lst for lst in lpa_lists if lst != []]
+    
+    plt.hist(first_week,bins=len(dfs))
+    plt.title("Histogram showing the distribution of lines per author for the first week")
+    plt.show()
+
+    # merges data
+    output = merge_lists(lpa_lists)
+
+    # converts model to dataframe
+    model_df = pd.DataFrame(data={'model':output[0]})
+    # fits ARIMA model to data
+    # FitARIMA(dfseries=model_df)
 
     # creates lpa vs weeks plot
-    output = merge_lists(lists)
     merged=output[0]
     ci=output[1]
     num_weeks=output[2]
     weeks = np.linspace(0,num_weeks,num_weeks)
+
 
     # plots main lpa
     plt.plot(weeks,merged)
@@ -99,9 +112,9 @@ def main():
     # Splits repos into short and long term projects
     short_repos,long_repos = split_repos(all_dfs) 
 
-
-    model(short_repos,"Short Repos")
-    model(long_repos,"Long Repos")
+    model(dfs=all_dfs,txt="All repos")
+    model(dfs=short_repos,txt="Short Repos")
+    model(dfs=long_repos,txt="Long Repos")
 
 if __name__ == "__main__":
     main()
