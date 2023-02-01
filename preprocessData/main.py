@@ -8,6 +8,7 @@ import matplotlib.pyplot as plt
 from change_pts import detect_change_pts
 from tools import read_data_to_dataframes, filter_dataframe, lines_per_author
 from timeseries import FitARIMA
+from scipy.signal import savgol_filter
 
 def project_length(repo): # function to calculate the length of projects
     length = float(max(repo['year']))-float(min(repo['year']))
@@ -78,6 +79,19 @@ def model(dfs,txt,find_change_pts=False):
     merged,ci,num_weeks = merge_lists(lpa_lists)
     weeks = np.linspace(0,num_weeks,num_weeks)
 
+    # filtered data using Savitzky-Golay filter
+    merged_filtered = savgol_filter(x=merged,window_length=50,polyorder=2)
+
+    # converts model to dataframe for use with FitARIMA
+    model_df = pd.DataFrame(data={'model':merged_filtered})
+    # fits ARIMA model to data
+    arima_df = FitARIMA(dfseries=model_df)
+    arima_model = np.array(arima_df[0])
+    # sets all negative values to zero
+    arima_model[arima_model<0] = 0
+
+
+
     # creates lpa vs weeks plot
     # plots main lpa
     plt.plot(weeks,merged)
@@ -86,19 +100,16 @@ def model(dfs,txt,find_change_pts=False):
     plt.title(txt)
     plt.show()
 
+    # plots data after being filtered
+    plt.plot(weeks,merged_filtered)
+    plt.title("Filtered Model")
+    plt.show()
 
-    # converts model to dataframe for use with FitARIMA
-    model_df = pd.DataFrame(data={'model':merged})
-
-    # fits ARIMA model to data
-    arima_df = FitARIMA(dfseries=model_df)
-    arima_model = np.array(arima_df[0])
-    # sets all negative values to zero
-    arima_model[arima_model<0] = 0
     # plots arima model
-    plt.plot(arima_model)
+    plt.plot(weeks,arima_model)
     plt.title("ARIMA Model fitted to data")
     plt.show()
+
 
     # finds 2 change points
     if find_change_pts:
@@ -115,8 +126,8 @@ def main():
     short_repos,long_repos = split_repos(all_dfs) 
 
     model(dfs=all_dfs,txt="All repos")
-    # model(dfs=short_repos,txt="Short Repos")
-    # model(dfs=long_repos,txt="Long Repos")
+    model(dfs=short_repos,txt="Short Repos")
+    model(dfs=long_repos,txt="Long Repos")
 
 if __name__ == "__main__":
     main()
