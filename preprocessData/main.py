@@ -83,12 +83,9 @@ def model(dfs,txt,find_change_pts=False):
     merged_filtered = savgol_filter(x=merged,window_length=50,polyorder=2)
 
     # converts model to dataframe for use with FitARIMA
-    model_df = pd.DataFrame(data={'model':merged_filtered})
+    model_df = pd.DataFrame(data={'model':merged})
     # fits ARIMA model to data
-    arima_df = FitARIMA(dfseries=model_df)
-    arima_model = np.array(arima_df[0])
-    # sets all negative values to zero
-    arima_model[arima_model<0] = 0
+    arima_model = FitARIMA(dfseries=model_df)
 
 
 
@@ -126,8 +123,8 @@ def main():
     short_repos,long_repos = split_repos(all_dfs) 
 
     model(dfs=all_dfs,txt="All repos")
-    model(dfs=short_repos,txt="Short Repos")
-    model(dfs=long_repos,txt="Long Repos")
+    # model(dfs=short_repos,txt="Short Repos")
+    # model(dfs=long_repos,txt="Long Repos")
 
 if __name__ == "__main__":
     main()

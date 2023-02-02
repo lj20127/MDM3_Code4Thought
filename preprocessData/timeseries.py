@@ -46,7 +46,7 @@ def SeasonalityCheck(dfseries):
 #ARIMA MODEL
 
 def FitARIMA(dfseries,plot=False):
-    model = ARIMA(dfseries, order=(1,1,1))
+    model = ARIMA(dfseries, order=(0,2,12))
     modelfit = model.fit()
     print(modelfit.summary())  
     
@@ -60,10 +60,9 @@ def FitARIMA(dfseries,plot=False):
         plt.show()  
     
     # Actual vs Fitted  
-    # modelfit.plot_predict(dynamic=True, plot_insample=False) # AttributeError: 'ARIMAResults' object has no attribute 'plot_predict'
-    # plt.show()
-         
-    return myresiduals
+    model_values = modelfit.predict()
+    
+    return model_values
     
     
     
