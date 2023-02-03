@@ -83,9 +83,9 @@ def model(dfs,txt,find_change_pts=False):
     merged_filtered = savgol_filter(x=merged,window_length=50,polyorder=2)
 
     # converts model to dataframe for use with FitARIMA
-    model_df = pd.DataFrame(data={'model':merged})
-    # fits ARIMA model to data
-    arima_model = FitARIMA(dfseries=model_df)
+    model_df = pd.DataFrame(data={'model':merged_filtered})
+    # fits ARIMA model to filtered data
+    arima_model,residuals = FitARIMA(dfseries=model_df)
 
 
 
@@ -104,13 +104,14 @@ def model(dfs,txt,find_change_pts=False):
 
     # plots arima model
     plt.plot(weeks,arima_model)
-    plt.title("ARIMA Model fitted to data")
+    plt.fill_between(weeks,arima_model,(arima_model+residuals[0]),color='red',alpha=0.3)
+    plt.title("ARIMA Model fitted to filtered data")
     plt.show()
 
 
     # finds 2 change points
     if find_change_pts:
-        change_pts = detect_change_pts(np.array(merged),2)
+        change_pts = detect_change_pts(np.array(arima_model),2)
 
 def main():
     # Specify folder path that contains the json files
@@ -122,9 +123,9 @@ def main():
     # Splits repos into short and long term projects
     short_repos,long_repos = split_repos(all_dfs) 
 
-    model(dfs=all_dfs,txt="All repos")
-    # model(dfs=short_repos,txt="Short Repos")
-    # model(dfs=long_repos,txt="Long Repos")
+    model(dfs=all_dfs,txt="All repos",find_change_pts=True)
+    model(dfs=short_repos,txt="Short Repos",find_change_pts=True)
+    model(dfs=long_repos,txt="Long Repos",find_change_pts=True)
 
 if __name__ == "__main__":
     main()
