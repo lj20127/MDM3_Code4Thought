@@ -63,7 +63,6 @@ def model(dfs,txt,find_change_pts=False):
         filtered_df = filter_dataframe(df)
         # gets lines per author per week
         new_df = lpa(filtered_df)
-        # new_df = lines_per_author(filtered_df) # this should do the same as function above but has completely different outputs
 
         lpa_lists[i] = np.array(new_df["week_linesperauthor"])
         first_week[i] = lpa_lists[i][0]
@@ -85,7 +84,7 @@ def model(dfs,txt,find_change_pts=False):
     # converts model to dataframe for use with FitARIMA
     model_df = pd.DataFrame(data={'model':merged_filtered})
     # fits ARIMA model to filtered data
-    arima_model,residuals = FitARIMA(dfseries=model_df)
+    arima_model,residuals = FitARIMA(dfseries=model_df,plot=True)
 
 
 
@@ -94,24 +93,30 @@ def model(dfs,txt,find_change_pts=False):
     plt.plot(weeks,merged)
     # plots confidence interval
     # plt.fill_between(weeks,(np.array(merged)-np.array(ci)),(np.array(merged)+np.array(ci)),color='red',alpha=0.3)
-    plt.title(txt)
+    plt.title(f"Lines Per Author for {txt}")
+    plt.xlabel("Weeks")
+    plt.ylabel("Median Lines Per Author")
     plt.show()
 
     # plots data after being filtered
     plt.plot(weeks,merged_filtered)
-    plt.title("Filtered Model")
+    plt.title(f"Filtered Lines Per Author for {txt}")
+    plt.xlabel("Weeks")
+    plt.ylabel("Median Lines Per Author")
     plt.show()
 
     # plots arima model
-    plt.plot(weeks,arima_model)
-    plt.fill_between(weeks,arima_model,(arima_model+residuals[0]),color='red',alpha=0.3)
-    plt.title("ARIMA Model fitted to filtered data")
+    plt.plot(weeks[1:],arima_model[1:])
+    plt.fill_between(weeks[1:],arima_model[1:],(arima_model[1:]+residuals[0][1:]),color='red',alpha=0.3)
+    plt.title(f"ARIMA Model fitted to filtered data for {txt}")
+    plt.xlabel("Weeks")
+    plt.ylabel("Median Lines Per Author")
     plt.show()
 
 
     # finds 2 change points
     if find_change_pts:
-        change_pts = detect_change_pts(np.array(arima_model),2)
+        change_pts = detect_change_pts(np.array(arima_model[1:]),txt,2)
 
 def main():
     # Specify folder path that contains the json files
@@ -123,7 +128,7 @@ def main():
     # Splits repos into short and long term projects
     short_repos,long_repos = split_repos(all_dfs) 
 
-    model(dfs=all_dfs,txt="All repos",find_change_pts=True)
+    # model(dfs=all_dfs,txt="All repos",find_change_pts=True)
     model(dfs=short_repos,txt="Short Repos",find_change_pts=True)
     model(dfs=long_repos,txt="Long Repos",find_change_pts=True)
 
