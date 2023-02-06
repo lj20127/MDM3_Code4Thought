@@ -130,9 +130,9 @@ def main():
     # Splits repos into short and long term projects
     short_repos,long_repos = split_repos(all_dfs) 
 
-    model(dfs=all_dfs,txt="All repos",find_change_pts=True)
-    # model(dfs=short_repos,txt="Short Repos",find_change_pts=True)
-    # model(dfs=long_repos,txt="Long Repos",find_change_pts=True)
+    # model(dfs=all_dfs,txt="All repos",find_change_pts=True)
+    model(dfs=short_repos,txt="Short Repos",find_change_pts=True)
+    model(dfs=long_repos,txt="Long Repos",find_change_pts=True)
 
 if __name__ == "__main__":
     main()
