@@ -71,7 +71,8 @@ def FitARIMA(dfseries,plot=False):
 
     model = ARIMA(dfseries, order=(1,1,3))
     modelfit = model.fit()
-    # print(modelfit.summary())  
+    print(modelfit.summary())
+    print(modelfit.conf_int())
 
     # Plotting Residual Errors  
     #There is a bias in the prediction (a non-zero mean in the residuals)
