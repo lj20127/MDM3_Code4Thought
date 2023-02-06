@@ -69,7 +69,7 @@ def FitARIMA(dfseries,plot=False):
     kpss_test(dfseries.diff().dropna())
     DickeyFuller(dfseries.diff().dropna())
 
-    model = ARIMA(dfseries, order=(1,1,3))
+    model = ARIMA(dfseries, order=(2,1,4))
     modelfit = model.fit()
     # print(modelfit.summary())  
 
