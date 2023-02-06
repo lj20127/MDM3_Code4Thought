@@ -78,9 +78,9 @@ def FitARIMA(dfseries,plot=False):
     myresiduals = pd.DataFrame(modelfit.resid) 
     if plot:
         # shows what p and q values we should use for ARIMA model
-        fig, (ax1, ax2) = plt.subplots(2)
-        plot_acf(dfseries.diff().dropna(), ax=ax1)
-        plot_pacf(dfseries.diff().dropna(), ax=ax2)
+        plot_acf(dfseries.diff().dropna())
+        plt.show()
+        plot_pacf(dfseries.diff().dropna())
         plt.show()
         
         fig, ax = plt.subplots(1,2)  
