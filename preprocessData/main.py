@@ -72,25 +72,27 @@ def model(dfs,txt,find_change_pts=False):
     lpa_lists = [lst for lst in lpa_lists if lst != []]
     plt.hist(first_week,bins=len(dfs))
     plt.title("Histogram showing the distribution of lines per author for the first week")
+    plt.xlabel("Lines per author in the first week")
+    plt.ylabel("Frequency")
     plt.show()
 
     # merges data
-    merged,ci,num_weeks = merge_lists(lpa_lists)
+    median_model,ci,num_weeks = merge_lists(lpa_lists)
     weeks = np.linspace(0,num_weeks,num_weeks)
 
     # filtered data using Savitzky-Golay filter
-    merged_filtered = savgol_filter(x=merged,window_length=50,polyorder=2)
+    median_model_filtered = savgol_filter(x=median_model,window_length=50,polyorder=2)
 
     # converts model to dataframe for use with FitARIMA
-    model_df = pd.DataFrame(data={'model':merged_filtered})
+    median_model_df = pd.DataFrame(data={'model':median_model_filtered})
     # fits ARIMA model to filtered data
-    arima_model,residuals = FitARIMA(dfseries=model_df,plot=True)
+    arima_model,residuals = FitARIMA(dfseries=median_model_df,plot=True)
 
 
 
     # creates lpa vs weeks plot
     # plots main lpa
-    plt.plot(weeks,merged)
+    plt.plot(weeks,median_model)
     # plots confidence interval
     # plt.fill_between(weeks,(np.array(merged)-np.array(ci)),(np.array(merged)+np.array(ci)),color='red',alpha=0.3)
     plt.title(f"Lines Per Author for {txt}")
@@ -99,7 +101,7 @@ def model(dfs,txt,find_change_pts=False):
     plt.show()
 
     # plots data after being filtered
-    plt.plot(weeks,merged_filtered)
+    plt.plot(weeks,median_model_filtered)
     plt.title(f"Filtered Lines Per Author for {txt}")
     plt.xlabel("Weeks")
     plt.ylabel("Median Lines Per Author")
@@ -128,9 +130,9 @@ def main():
     # Splits repos into short and long term projects
     short_repos,long_repos = split_repos(all_dfs) 
 
-    # model(dfs=all_dfs,txt="All repos",find_change_pts=True)
-    model(dfs=short_repos,txt="Short Repos",find_change_pts=True)
-    model(dfs=long_repos,txt="Long Repos",find_change_pts=True)
+    model(dfs=all_dfs,txt="All repos",find_change_pts=True)
+    # model(dfs=short_repos,txt="Short Repos",find_change_pts=True)
+    # model(dfs=long_repos,txt="Long Repos",find_change_pts=True)
 
 if __name__ == "__main__":
     main()
