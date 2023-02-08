@@ -2,18 +2,19 @@ import numpy as np
 import ruptures as rpt
 import matplotlib.pyplot as plt
 
-def unknown_n_bkps(rpt_model): # finds number of change points for different penalty values
+def unknown_n_bkps(model): # finds number of change points for different penalty values
+    rpt_model = rpt.Pelt(model="rbf").fit(model)
     num_change_pts = []
-    for i in range(0,1000):
-        change_pts = rpt_model.predict(pen=i)
+    for i in range(0,20):
+        change_pts = rpt_model.predict(pen=i*np.log(len(model)))
         num_change_pts.append(len(change_pts)-1)
-    plt.hist(num_change_pts,bins=[0,1,2,3,4])
-    plt.title("Distsribution of change points for different penalties")
+    plt.plot(num_change_pts)
+    plt.title("Distsribution of change points for different penalties using PELT")
     plt.show()
 
 def detect_change_pts(model,n):
+    unknown_n_bkps(model)
     rpt_model = rpt.Binseg(model="rbf").fit(model)
-    unknown_n_bkps(rpt_model)
     change_pts = rpt_model.predict(n_bkps=n)
     return change_pts
 
