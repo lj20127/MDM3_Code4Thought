@@ -118,7 +118,17 @@ def model(dfs,txt,find_change_pts=False):
 
     # finds 2 change points
     if find_change_pts:
-        change_pts = detect_change_pts(np.array(arima_model[1:]),txt,2)
+        change_pts = detect_change_pts(np.array(arima_model[1:]),2)
+        fig, ax = plt.subplots()
+        ax.plot(arima_model[1:])
+        ax.axvspan(0, change_pts[0], alpha=0.25, color='green')
+        ax.axvspan(change_pts[0], change_pts[1], alpha=0.25, color='orange')
+        ax.axvspan(change_pts[1], change_pts[2], alpha=0.25, color='red')
+        plt.title(f"Change Point Analysis for {txt}",fontdict={'fontsize': 15})
+        plt.xlabel("Weeks",fontdict={'fontsize': 12})
+        plt.ylabel("Median Lines Per Author",fontdict={'fontsize': 12})
+        plt.show()
+
 
 def main():
     # Specify folder path that contains the json files
