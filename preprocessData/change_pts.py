@@ -2,14 +2,9 @@ import numpy as np
 import ruptures as rpt
 import matplotlib.pyplot as plt
 
-def detect_change_pts(model,txt,n):
+def detect_change_pts(model,n):
     rpt_list = rpt.Binseg(model="l2").fit(model)
     change_pts = rpt_list.predict(n_bkps=n)
-    fig = rpt.display(model,change_pts)
-    plt.title(f"Change Point Analysis for {txt}")
-    plt.xlabel("Weeks")
-    plt.ylabel("Median Lines Per Author")
-    plt.show()
     return change_pts
 
 if __name__ == "__main__":
