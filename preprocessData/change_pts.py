@@ -13,7 +13,6 @@ def unknown_n_bkps(model): # finds number of change points for different penalty
     plt.show()
 
 def detect_change_pts(model,n):
-    unknown_n_bkps(model)
     rpt_model = rpt.Binseg(model="rbf").fit(model)
     change_pts = rpt_model.predict(n_bkps=n)
     return change_pts
