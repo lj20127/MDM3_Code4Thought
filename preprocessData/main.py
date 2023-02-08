@@ -130,6 +130,7 @@ def model(dfs,txt,find_change_pts=False):
         plt.xlabel("Weeks",fontdict={'fontsize': AXIS_FONT_SIZE})
         plt.ylabel("Median Lines Per Author",fontdict={'fontsize': AXIS_FONT_SIZE})
         plt.show()
+        print(f"Change Points at weeks {change_pts[0]} and {change_pts[1]}")
 
 
 def main():
@@ -142,9 +143,9 @@ def main():
     # Splits repos into short and long term projects
     short_repos,long_repos = split_repos(all_dfs) 
 
-    # model(dfs=all_dfs,txt="All repos",find_change_pts=True)
-    model(dfs=short_repos,txt="Short Repos",find_change_pts=True)
-    model(dfs=long_repos,txt="Long Repos",find_change_pts=True)
+    model(dfs=all_dfs,txt="All repos",find_change_pts=True)
+    # model(dfs=short_repos,txt="Short Repos",find_change_pts=True)
+    # model(dfs=long_repos,txt="Long Repos",find_change_pts=True)
 
 if __name__ == "__main__":
     main()
