@@ -124,9 +124,9 @@ def model(dfs,txt,find_change_pts=False):
         ax.axvspan(0, change_pts[0], alpha=0.25, color='green')
         ax.axvspan(change_pts[0], change_pts[1], alpha=0.25, color='orange')
         ax.axvspan(change_pts[1], change_pts[2], alpha=0.25, color='red')
-        plt.title(f"Change Point Analysis for {txt}",fontdict={'fontsize': 15})
-        plt.xlabel("Weeks",fontdict={'fontsize': 12})
-        plt.ylabel("Median Lines Per Author",fontdict={'fontsize': 12})
+        plt.title(f"Change Point Analysis for {txt}",fontdict={'fontsize': 25})
+        plt.xlabel("Weeks",fontdict={'fontsize': 20})
+        plt.ylabel("Median Lines Per Author",fontdict={'fontsize': 20})
         plt.show()
 
 
