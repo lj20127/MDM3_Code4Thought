@@ -13,7 +13,7 @@ def unknown_n_bkps(rpt_model): # finds number of change points for different pen
 
 def detect_change_pts(model,n):
     rpt_model = rpt.Binseg(model="rbf").fit(model)
-    unkown_n_bkps(rpt_model)
+    unknown_n_bkps(rpt_model)
     change_pts = rpt_model.predict(n_bkps=n)
     return change_pts
 
