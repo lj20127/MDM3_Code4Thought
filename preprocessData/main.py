@@ -94,19 +94,14 @@ def model(dfs,txt,find_change_pts=False):
 
     # creates lpa vs weeks plot
     # plots main lpa
-    plt.plot(weeks,median_model)
+    plt.plot(weeks,median_model,label="Unfiltered")
+    plt.plot(weeks,median_model_filtered,label="Filtered",linewidth=3)
     # plots confidence interval
     # plt.fill_between(weeks,(np.array(merged)-np.array(ci)),(np.array(merged)+np.array(ci)),color='red',alpha=0.3)
     plt.title(f"Lines Per Author for {txt}",fontdict={'fontsize': TITLE_FONT_SIZE})
     plt.xlabel("Weeks",fontdict={'fontsize': AXIS_FONT_SIZE})
     plt.ylabel("Median Lines Per Author",fontdict={'fontsize': AXIS_FONT_SIZE})
-    plt.show()
-
-    # plots data after being filtered
-    plt.plot(weeks,median_model_filtered)
-    plt.title(f"Filtered Lines Per Author for {txt}",fontdict={'fontsize': TITLE_FONT_SIZE})
-    plt.xlabel("Weeks",fontdict={'fontsize': AXIS_FONT_SIZE})
-    plt.ylabel("Median Lines Per Author",fontdict={'fontsize': AXIS_FONT_SIZE})
+    plt.legend()
     plt.show()
 
     # plots arima model
