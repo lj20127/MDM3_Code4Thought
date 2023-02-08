@@ -4,7 +4,7 @@ import pandas as pd
 import numpy as np
 from merging_lists import merge_lists
 import matplotlib.pyplot as plt
-from change_pts import detect_change_pts
+from change_pts import detect_change_pts, unknown_n_bkps
 from tools import read_data_to_dataframes, filter_dataframe, lines_per_author
 from timeseries import FitARIMA
 from scipy.signal import savgol_filter
@@ -70,8 +70,8 @@ def model(dfs,txt,find_change_pts=False):
         first_week[i] = lpa_lists[i][0]
         i+=1
 
-    # removes any lpa lists that are empty
-    lpa_lists = [lst for lst in lpa_lists if lst != []]
+    # removes any lpa lists that are less than 1 i.e. removes any projects that are 1 week in duration
+    lpa_lists = [lst for lst in lpa_lists if len(lst) > 1]
     plt.hist(first_week,bins=len(dfs))
     plt.title("Histogram showing the distribution of lines per author for the first week",fontdict={'fontsize': TITLE_FONT_SIZE})
     plt.xlabel("Lines per author in the first week",fontdict={'fontsize': AXIS_FONT_SIZE})
@@ -90,7 +90,7 @@ def model(dfs,txt,find_change_pts=False):
     # fits ARIMA model to filtered data
     arima_model,residuals = FitARIMA(dfseries=median_model_df,plot=True)
 
-
+    print(num_weeks)
 
     # creates lpa vs weeks plot
     # plots main lpa
@@ -121,6 +121,7 @@ def model(dfs,txt,find_change_pts=False):
     # finds 2 change points
     if find_change_pts:
         change_pts = detect_change_pts(np.array(arima_model[1:]),2)
+        # unknown_n_bkps(np.array(arima_model[1:]))
         fig, ax = plt.subplots()
         ax.plot(arima_model[1:])
         ax.axvspan(0, change_pts[0], alpha=0.25, color='green')
