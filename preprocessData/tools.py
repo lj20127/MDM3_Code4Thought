@@ -64,7 +64,7 @@ def filter_dataframe(dataframe, technology="java"):
     return dataframe
 
 
-def lines_per_author(dataframe, timeframe="week"):
+def lines_per_author(dataframe, timeframe="week", interp_method="linear"):
     if timeframe not in ["day", "week", "month"]:
         print("Please choose one of the following timeframes: 'day', 'week' or 'month'.")
         return
@@ -78,13 +78,14 @@ def lines_per_author(dataframe, timeframe="week"):
     
     lines_per_author_dataframe = (lines_per_timeframe / unique_emails).to_frame().reset_index()
     lines_per_author_dataframe.columns = [timeframe, column_name]
-
     lines_per_author_dataframe.index = lines_per_author_dataframe[timeframe].tolist()
-    lines_per_author_dataframe = lines_per_author_dataframe.reindex(np.arange(lines_per_author_dataframe[timeframe].min(), lines_per_author_dataframe[timeframe].max() + 1), fill_value=0)
-    lines_per_author_dataframe[column_name] = lines_per_author_dataframe[column_name].fillna(0)
+    lines_per_author_dataframe = lines_per_author_dataframe.reindex(np.arange(lines_per_author_dataframe[timeframe].min(), lines_per_author_dataframe[timeframe].max() + 1))
     lines_per_author_dataframe[timeframe].mask(lines_per_author_dataframe[timeframe] == 0, lines_per_author_dataframe.index.to_series(), inplace=True)
+    # Interpolates for NaN values
+    if interp_method:
+        lines_per_author_dataframe[column_name] = lines_per_author_dataframe[column_name].interpolate(interp_method)
+    lines_per_author_dataframe[timeframe] = lines_per_author_dataframe.index
     return lines_per_author_dataframe
-
 
 def normalize_column(dataframe, column_name):
     dataframe[column_name + "_norm"] = (
