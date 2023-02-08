@@ -79,12 +79,14 @@ def FitARIMA(dfseries,plot=False):
     myresiduals = pd.DataFrame(modelfit.resid) 
     if plot:
         # shows what p and q values we should use for ARIMA model
-        plot_acf(dfseries.diff().dropna())
-        plt.show()
-        plot_pacf(dfseries.diff().dropna())
+        fig, ax = plt.subplots(2,1)  
+        plot_acf(dfseries.diff().dropna(),ax=ax[0])
+        ax[0].set_title("Autocorrelation",fontdict={'fontsize': 25})
+        plot_pacf(dfseries.diff().dropna(),ax=ax[1])
+        ax[1].set_title("Partial Autocorrelation",fontdict={'fontsize': 25})
         plt.show()
         
-        fig, ax = plt.subplots(1,2)  
+        fig, ax = plt.subplots(1,2) 
         myresiduals.plot(title = "Residuals", ax = ax[0])  
         myresiduals.plot(kind = 'kde', title = 'Density', ax = ax[1])  
         plt.show()  
