@@ -51,7 +51,10 @@ def kpss_test(dfseries,**kw):
     print('Critical Values:')
     for key, value in critical_values.items():
         print(f'    {key} : {value}')
-    print(f'Result: The series is {"not " if p_value < 0.05 else ""}stationary')
+    if p_value > 0.05:
+        print(f"Result: The series is stationary")
+    else:
+        print(f'Result: The series is not stationary')
 
 
 def SeasonalityCheck(dfseries):
