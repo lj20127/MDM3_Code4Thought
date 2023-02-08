@@ -83,7 +83,7 @@ def model(dfs,txt,find_change_pts=False):
     weeks = np.linspace(0,num_weeks,num_weeks)
 
     # filtered data using Savitzky-Golay filter
-    median_model_filtered = savgol_filter(x=median_model,window_length=50,polyorder=2)
+    median_model_filtered = savgol_filter(x=median_model,window_length=num_weeks//50,polyorder=3)
 
     # converts model to dataframe for use with FitARIMA
     median_model_df = pd.DataFrame(data={'model':median_model_filtered})
@@ -143,9 +143,9 @@ def main():
     # Splits repos into short and long term projects
     short_repos,long_repos = split_repos(all_dfs) 
 
-    model(dfs=all_dfs,txt="All repos",find_change_pts=True)
-    # model(dfs=short_repos,txt="Short Repos",find_change_pts=True)
-    # model(dfs=long_repos,txt="Long Repos",find_change_pts=True)
+    # model(dfs=all_dfs,txt="All repos",find_change_pts=True)
+    model(dfs=short_repos,txt="Short Repos",find_change_pts=True)
+    model(dfs=long_repos,txt="Long Repos",find_change_pts=True)
 
 if __name__ == "__main__":
     main()
