@@ -1,5 +1,4 @@
 from extractJson import extractJson
-from lpa import lpa
 import os
 import pandas as pd
 import numpy as np
@@ -65,7 +64,7 @@ def model(dfs,txt,find_change_pts=False):
         # filters dataframe
         filtered_df = filter_dataframe(df)
         # gets lines per author per week
-        new_df = lpa(filtered_df)
+        new_df = lines_per_author(filtered_df)
 
         lpa_lists[i] = np.array(new_df["week_linesperauthor"])
         first_week[i] = lpa_lists[i][0]
