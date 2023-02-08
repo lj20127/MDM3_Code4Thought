@@ -10,6 +10,9 @@ from tools import read_data_to_dataframes, filter_dataframe, lines_per_author
 from timeseries import FitARIMA
 from scipy.signal import savgol_filter
 
+TITLE_FONT_SIZE = 25
+AXIS_FONT_SIZE = 20
+
 def project_length(repo): # function to calculate the length of projects
     length = float(max(repo['year']))-float(min(repo['year']))
     return length
@@ -71,9 +74,9 @@ def model(dfs,txt,find_change_pts=False):
     # removes any lpa lists that are empty
     lpa_lists = [lst for lst in lpa_lists if lst != []]
     plt.hist(first_week,bins=len(dfs))
-    plt.title("Histogram showing the distribution of lines per author for the first week")
-    plt.xlabel("Lines per author in the first week")
-    plt.ylabel("Frequency")
+    plt.title("Histogram showing the distribution of lines per author for the first week",fontdict={'fontsize': TITLE_FONT_SIZE})
+    plt.xlabel("Lines per author in the first week",fontdict={'fontsize': AXIS_FONT_SIZE})
+    plt.ylabel("Frequency",fontdict={'fontsize': AXIS_FONT_SIZE})
     plt.show()
 
     # merges data
@@ -95,24 +98,24 @@ def model(dfs,txt,find_change_pts=False):
     plt.plot(weeks,median_model)
     # plots confidence interval
     # plt.fill_between(weeks,(np.array(merged)-np.array(ci)),(np.array(merged)+np.array(ci)),color='red',alpha=0.3)
-    plt.title(f"Lines Per Author for {txt}")
-    plt.xlabel("Weeks")
-    plt.ylabel("Median Lines Per Author")
+    plt.title(f"Lines Per Author for {txt}",fontdict={'fontsize': TITLE_FONT_SIZE})
+    plt.xlabel("Weeks",fontdict={'fontsize': AXIS_FONT_SIZE})
+    plt.ylabel("Median Lines Per Author",fontdict={'fontsize': AXIS_FONT_SIZE})
     plt.show()
 
     # plots data after being filtered
     plt.plot(weeks,median_model_filtered)
-    plt.title(f"Filtered Lines Per Author for {txt}")
-    plt.xlabel("Weeks")
-    plt.ylabel("Median Lines Per Author")
+    plt.title(f"Filtered Lines Per Author for {txt}",fontdict={'fontsize': TITLE_FONT_SIZE})
+    plt.xlabel("Weeks",fontdict={'fontsize': AXIS_FONT_SIZE})
+    plt.ylabel("Median Lines Per Author",fontdict={'fontsize': AXIS_FONT_SIZE})
     plt.show()
 
     # plots arima model
     plt.plot(weeks[1:],arima_model[1:])
     plt.fill_between(weeks[1:],arima_model[1:],(arima_model[1:]+residuals[0][1:]),color='red',alpha=0.3)
-    plt.title(f"ARIMA Model fitted to filtered data for {txt}")
-    plt.xlabel("Weeks")
-    plt.ylabel("Median Lines Per Author")
+    plt.title(f"ARIMA Model fitted to filtered data for {txt}",fontdict={'fontsize': TITLE_FONT_SIZE})
+    plt.xlabel("Weeks",fontdict={'fontsize': AXIS_FONT_SIZE})
+    plt.ylabel("Median Lines Per Author",fontdict={'fontsize': AXIS_FONT_SIZE})
     plt.show()
 
 
@@ -124,9 +127,9 @@ def model(dfs,txt,find_change_pts=False):
         ax.axvspan(0, change_pts[0], alpha=0.25, color='green')
         ax.axvspan(change_pts[0], change_pts[1], alpha=0.25, color='orange')
         ax.axvspan(change_pts[1], change_pts[2], alpha=0.25, color='red')
-        plt.title(f"Change Point Analysis for {txt}",fontdict={'fontsize': 25})
-        plt.xlabel("Weeks",fontdict={'fontsize': 20})
-        plt.ylabel("Median Lines Per Author",fontdict={'fontsize': 20})
+        plt.title(f"Change Point Analysis for {txt}",fontdict={'fontsize': TITLE_FONT_SIZE})
+        plt.xlabel("Weeks",fontdict={'fontsize': AXIS_FONT_SIZE})
+        plt.ylabel("Median Lines Per Author",fontdict={'fontsize': AXIS_FONT_SIZE})
         plt.show()
 
 
