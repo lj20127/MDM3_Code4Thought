@@ -90,8 +90,6 @@ def model(dfs,txt,find_change_pts=False):
     # fits ARIMA model to filtered data
     arima_model,residuals = FitARIMA(dfseries=median_model_df,plot=True)
 
-    print(num_weeks)
-
     # creates lpa vs weeks plot
     # plots main lpa
     plt.plot(weeks,median_model,label="Unfiltered")
