@@ -2,7 +2,7 @@
 
 ## Model GUI
 
-This repository contains a Python GUI built using Dash and Plotly that allows you to customize and compare four different time series models. The GUI allows you to choose the model type (short-term ARIMA, short-term random walk, long-term ARIMA, or long-term random walk) and the number of change points to detect.
+This repository contains a Python GUI built using Dash and Plotly that allows you to customize and compare four different time series models. The GUI allows you to choose the model type (short-term ARIMA, short-term random walk, long-term ARIMA, or long-term random walk), the number of change points to detect, and you can upload new git log data in JSON format to calculate percentage difference for each phase.
 
 The code for the GUI is located in the `model_gui` folder, and the main script to run the GUI is called `main.py`. To run the GUI, simply navigate to the `model_gui` folder and run the `main.py` script:
 
@@ -17,3 +17,6 @@ Please note that you will need to install the necessary libraries (Dash, Plotly,
 ```
 pip install dash plotly pandas numpy statsmodels
 ```
+
+Here is a screenshot of the GUI:
+![alt text](https://github.com/lj20127/MDM3_Code4Thought/blob/main/model_gui.jpg?raw=true)
