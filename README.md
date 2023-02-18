@@ -19,4 +19,5 @@ pip install dash plotly pandas numpy statsmodels
 ```
 
 Here is a screenshot of the GUI:
-![alt text](https://github.com/lj20127/MDM3_Code4Thought/blob/main/model_gui.jpg?raw=true)
+
+![alt text](https://github.com/lj20127/MDM3_Code4Thought/blob/main/model_gui.png?raw=true)
